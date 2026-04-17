@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kalkulator Shopee untuk seller - hitung harga jual, profit, dan ROAS iklan dengan akurat. Anti boncos!" />
+  <title>Kalkulator Shopee — Harga Jual, Profit & ROAS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,600&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Decorative grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Header / Hero -->
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="hero__badge">
+        <span class="dot"></span>
+        <span>Update tarif Shopee — 2 Mei 2026</span>
+      </div>
+      <h1 class="hero__title">
+        Kalkulator <em>Shopee</em><br />
+        untuk Seller yang <span class="underline-wobble">Gak Mau Boncos</span>.
+      </h1>
+      <p class="hero__subtitle">
+        Hitung mundur dari target profit, simulasikan ROAS iklan, dan kalkulasi massal ribuan produk — semua dalam satu alat, 100% di browser Anda.
+      </p>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs" role="tablist" aria-label="Pilih mode kalkulator">
+    <button class="tab tab--active" role="tab" data-tab="single" aria-selected="true">
+      <span class="tab__num">01</span>
+      <span class="tab__label">Hitung Harga Jual</span>
+    </button>
+    <button class="tab" role="tab" data-tab="roas" aria-selected="false">
+      <span class="tab__num">02</span>
+      <span class="tab__label">Simulasi ROAS</span>
+    </button>
+    <button class="tab" role="tab" data-tab="bulk" aria-selected="false">
+      <span class="tab__num">03</span>
+      <span class="tab__label">Hitung Massal</span>
+    </button>
+  </nav>
+
+  <main class="main">
+    <!-- ============ TAB 1: SINGLE CALCULATION ============ -->
+    <section class="panel panel--active" id="panel-single" role="tabpanel">
+      <div class="panel__grid">
+        <!-- Input column -->
+        <div class="card card--input">
+          <div class="card__header">
+            <h2>Input Perhitungan</h2>
+            <button class="btn-ghost" id="reset-single" type="button">↺ Reset</button>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Produk & Target</h3>
+            <div class="field">
+              <label for="hpp">Harga Pokok (HPP)</label>
+              <div class="input-wrap">
+                <span class="input-prefix">Rp</span>
+                <input type="text" inputmode="numeric" id="hpp" data-money value="50.000" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="profit-mode">Mode Profit</label>
+                <select id="profit-mode">
+                  <option value="percent" selected>Persentase (%)</option>
+                  <option value="nominal">Nominal (Rp)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="profit">Target Profit</label>
+                <div class="input-wrap">
+                  <input type="text" inputmode="decimal" id="profit" data-money value="15" />
+                  <span class="input-suffix" id="profit-suffix">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Diskon & Voucher</h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="diskon">Diskon Produk (%)</label>
+                <input type="text" inputmode="decimal" id="diskon" data-number value="4" />
+              </div>
+              <div class="field">
+                <label for="voucher">Voucher Toko (%)</label>
+                <input type="text" inputmode="decimal" id="voucher" data-number value="2" />
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Biaya Shopee (%)</h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="admin">Biaya Administrasi</label>
+                <input type="text" inputmode="decimal" id="admin" data-number value="8.25" />
+              </div>
+              <div class="field">
+                <label for="premi">Premi</label>
+                <input type="text" inputmode="decimal" id="premi" data-number value="0.5" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="xtra-ongkir">Gratis Ongkir XTRA</label>
+                <input type="text" inputmode="decimal" id="xtra-ongkir" data-number value="5.5" />
+              </div>
+              <div class="field">
+                <label for="xtra-promo">Promo XTRA</label>
+                <input type="text" inputmode="decimal" id="xtra-promo" data-number value="4.5" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="xtra-live">Live XTRA</label>
+                <input type="text" inputmode="decimal" id="xtra-live" data-number value="3" />
+              </div>
+              <div class="field">
+                <label for="preorder">Layanan Pre-Order</label>
+                <input type="text" inputmode="decimal" id="preorder" data-number value="3" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="spaylater">SPayLater (6 Bln)</label>
+                <input type="text" inputmode="decimal" id="spaylater" data-number value="4" />
+              </div>
+              <div class="field">
+                <label for="affiliate">Komisi Affiliate (AMS)</label>
+                <input type="text" inputmode="decimal" id="affiliate" data-number value="5" />
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Biaya Nominal (Rp)</h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="biaya-proses">Biaya Proses Pesanan</label>
+                <div class="input-wrap">
+                  <span class="input-prefix">Rp</span>
+                  <input type="text" inputmode="numeric" id="biaya-proses" data-money value="1.250" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="hemat-kirim">Hemat Biaya Kirim</label>
+                <div class="input-wrap">
+                  <span class="input-prefix">Rp</span>
+                  <input type="text" inputmode="numeric" id="hemat-kirim" data-money value="350" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result column -->
+        <div class="card card--result">
+          <div class="result-headline">
+            <span class="result-headline__label">Harga Jual yang Harus Anda Pasang</span>
+            <span class="result-headline__value" id="result-harga-jual">Rp0</span>
+            <span class="result-headline__hint">Agar profit bersih sesuai target</span>
+          </div>
+
+          <div class="result-summary">
+            <div class="summary-item">
+              <span class="summary-item__label">Profit Bersih</span>
+              <span class="summary-item__value" id="result-profit">Rp0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__label">Margin</span>
+              <span class="summary-item__value" id="result-margin">0%</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__label">Total Biaya</span>
+              <span class="summary-item__value" id="result-total-biaya">Rp0</span>
+            </div>
+          </div>
+
+          <h3 class="breakdown__title">Rincian Perhitungan</h3>
+          <div class="breakdown" id="breakdown">
+            <!-- Filled by JS -->
+          </div>
+
+          <div class="formula-note">
+            <strong>Cara kerja:</strong> Kalkulator ini menggunakan rumus <em>pembalikan biaya</em>. Harga jual dihitung mundur dari target profit, sehingga semua biaya Shopee (yang dihitung dari harga jual akhir) sudah terkompensasi otomatis.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TAB 2: ROAS SIMULATION ============ -->
+    <section class="panel" id="panel-roas" role="tabpanel" hidden>
+      <div class="card card--roas-summary">
+        <div class="roas-kpi">
+          <div class="roas-kpi__item roas-kpi__item--highlight">
+            <span class="roas-kpi__label">Break Even ROAS</span>
+            <span class="roas-kpi__value" id="roas-bep">-</span>
+            <span class="roas-kpi__hint">Batas minimal agar tidak rugi (termasuk PPN iklan 11%)</span>
+          </div>
+          <div class="roas-kpi__item">
+            <span class="roas-kpi__label">Profit per Order (Tanpa Iklan)</span>
+            <span class="roas-kpi__value" id="roas-profit-base">-</span>
+          </div>
+          <div class="roas-kpi__item">
+            <span class="roas-kpi__label">Harga Jual Aktif</span>
+            <span class="roas-kpi__value" id="roas-harga-jual">-</span>
+          </div>
+        </div>
+        <p class="roas-note">
+          📊 Simulasi di bawah menghitung sisa profit bersih setelah dikurangi biaya iklan (dengan PPN 11%) untuk setiap target ROAS dari 1× hingga 50×. Angka dihitung otomatis berdasarkan input di tab <strong>Hitung Harga Jual</strong>.
+        </p>
+      </div>
+
+      <div class="card card--roas-table">
+        <div class="card__header">
+          <h2>Simulasi Sisa Profit per Target ROAS</h2>
+          <div class="legend">
+            <span class="legend__item"><span class="legend__dot legend__dot--profit"></span>Profit</span>
+            <span class="legend__item"><span class="legend__dot legend__dot--loss"></span>Rugi</span>
+            <span class="legend__item"><span class="legend__dot legend__dot--bep"></span>Break Even</span>
+          </div>
+        </div>
+        <div class="roas-table-wrap">
+          <table class="roas-table" id="roas-table">
+            <thead>
+              <tr>
+                <th>ROAS</th>
+                <th>Biaya Iklan / Order</th>
+                <th>PPN Iklan (11%)</th>
+                <th>Total Biaya Iklan</th>
+                <th>Sisa Profit</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="roas-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TAB 3: BULK ============ -->
+    <section class="panel" id="panel-bulk" role="tabpanel" hidden>
+      <div class="panel__grid panel__grid--bulk">
+        <div class="card">
+          <div class="card__header">
+            <h2>Hitung Massal</h2>
+            <button class="btn-ghost" id="bulk-example" type="button">+ Isi Contoh</button>
+          </div>
+          <p class="bulk-hint">
+            Tempel daftar HPP (satu per baris) di kolom di bawah. Kalkulator akan menggunakan pengaturan biaya dari tab <strong>Hitung Harga Jual</strong>.
+          </p>
+          <label for="bulk-input" class="bulk-label">Daftar HPP (1 per baris)</label>
+          <textarea id="bulk-input" placeholder="50000&#10;75000&#10;120000&#10;..." spellcheck="false"></textarea>
+          <div class="bulk-actions">
+            <button class="btn-primary" id="bulk-calc" type="button">Hitung Semua</button>
+            <button class="btn-ghost" id="bulk-export" type="button">⬇ Ekspor CSV</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <h2>Hasil</h2>
+            <span class="bulk-count" id="bulk-count">0 produk</span>
+          </div>
+          <div class="bulk-table-wrap">
+            <table class="bulk-table" id="bulk-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>HPP</th>
+                  <th>Harga Jual</th>
+                  <th>Profit</th>
+                  <th>Margin</th>
+                </tr>
+              </thead>
+              <tbody id="bulk-tbody">
+                <tr class="bulk-empty">
+                  <td colspan="5">Belum ada data. Tempel HPP lalu klik "Hitung Semua".</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <strong>Kalkulator Shopee</strong> — dibuat untuk seller Indonesia.
+      </div>
+      <div class="footer__meta">
+        Semua perhitungan berjalan 100% di browser Anda. Tidak ada data yang dikirim ke server.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
