@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kalkulator Shopee untuk seller - hitung harga jual, profit, dan ROAS iklan dengan akurat. Anti boncos!" />
+  <title>Kalkulator Shopee — Harga Jual, Profit & ROAS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,600&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sofia+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Decorative grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Header / Hero -->
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="hero__top">
+        <div class="hero__badge">
+          <span class="dot"></span>
+          <span>Tarif resmi Shopee — Januari 2026</span>
+        </div>
+        <div class="hero__date" id="hero-date">Memuat tanggal...</div>
+      </div>
+      <h1 class="hero__title">
+        Kalkulator <em>Shopee</em><br />
+        untuk Seller yang <span class="underline-wobble">Gak Mau Boncos</span>.
+      </h1>
+      <p class="hero__subtitle">
+        Hitung mundur dari target profit, simulasikan ROAS iklan, dan kalkulasi massal ribuan produk — semua dalam satu alat, 100% di browser Anda.
+      </p>
+      <!-- Rotating inspirational quote -->
+      <div class="hero__quote" id="hero-quote">
+        <span class="hero__quote-icon">❝</span>
+        <blockquote class="hero__quote-text" id="quote-text">Memuat quote...</blockquote>
+        <cite class="hero__quote-author" id="quote-author"></cite>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs" role="tablist" aria-label="Pilih mode kalkulator">
+    <button class="tab tab--active" role="tab" data-tab="single" aria-selected="true">
+      <span class="tab__num">01</span>
+      <span class="tab__label">Hitung Harga Jual</span>
+    </button>
+    <button class="tab" role="tab" data-tab="roas" aria-selected="false">
+      <span class="tab__num">02</span>
+      <span class="tab__label">Simulasi ROAS</span>
+    </button>
+    <button class="tab" role="tab" data-tab="bulk" aria-selected="false">
+      <span class="tab__num">03</span>
+      <span class="tab__label">Hitung Massal</span>
+    </button>
+  </nav>
+
+  <main class="main">
+    <!-- ============ TAB 1: SINGLE CALCULATION ============ -->
+    <section class="panel panel--active" id="panel-single" role="tabpanel">
+      <div class="panel__grid">
+        <!-- Input column -->
+        <div class="card card--input">
+          <div class="card__header">
+            <h2>Input Perhitungan</h2>
+            <button class="btn-ghost" id="reset-single" type="button">↺ Reset</button>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Produk & Target</h3>
+            <div class="field">
+              <label for="hpp">Harga Pokok (HPP)</label>
+              <div class="input-wrap">
+                <span class="input-prefix">Rp</span>
+                <input type="text" inputmode="numeric" id="hpp" data-money value="50.000" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="profit-mode">Mode Profit</label>
+                <select id="profit-mode">
+                  <option value="percent" selected>Persentase (%)</option>
+                  <option value="nominal">Nominal (Rp)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="profit">Target Profit</label>
+                <div class="input-wrap">
+                  <input type="text" inputmode="decimal" id="profit" data-money value="15" />
+                  <span class="input-suffix" id="profit-suffix">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Setup & Profile Section -->
+          <div class="field-group setup-section">
+            <h3 class="field-group__title">
+              🧙 Setup Toko
+              <span class="tip" data-tip="Gunakan wizard untuk setup cepat dengan pertanyaan sederhana, atau simpan/muat profil toko yang sudah di-setup.">ⓘ</span>
+            </h3>
+
+            <div class="setup-actions">
+              <button type="button" class="setup-btn setup-btn--primary" id="wizard-open">
+                <span class="setup-btn__icon">🧭</span>
+                <div class="setup-btn__text">
+                  <div class="setup-btn__title">Setup dengan Wizard</div>
+                  <div class="setup-btn__sub">Jawab 5 pertanyaan, kalkulator terisi otomatis</div>
+                </div>
+              </button>
+
+              <div class="setup-actions-row">
+                <button type="button" class="btn-ghost" id="save-default-btn" title="Simpan setting saat ini sebagai default">
+                  💾 Simpan profil
+                </button>
+                <button type="button" class="btn-ghost" id="load-default-btn" title="Panggil setting yang tersimpan">
+                  ⤵ Muat profil
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">
+              Profil Toko
+              <span class="tip" data-tip="Pilih level toko (Non-Star / Star / Star+) dan kategori produk Anda. Tarif admin akan terisi otomatis sesuai tarif Shopee 2026.">ⓘ</span>
+            </h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="level-toko">Level Toko</label>
+                <select id="level-toko">
+                  <option value="non-star">Non-Star (baru / reguler)</option>
+                  <option value="star">Star</option>
+                  <option value="star-plus" selected>Star+</option>
+                  <option value="mall">Shopee Mall (brand resmi)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="kategori">Kategori Produk</label>
+                <select id="kategori">
+                  <option value="A" selected>Fashion, Makanan & Minuman, Perlengkapan Rumah (10%)</option>
+                  <option value="B">Elektronik, Perawatan Kulit, Aksesoris (9,25%)</option>
+                  <option value="C">Perlengkapan Bayi, Susu Formula, Suplemen (6,625%)</option>
+                  <option value="D">Elektronik Premium — Laptop, HP, Tablet (5,25%)</option>
+                  <option value="E">Perhiasan, Logam Mulia, Emas (4,25%)</option>
+                  <option value="khusus">Pulsa, Tiket, Voucher, E-Money (2,5%)</option>
+                  <option value="custom">Custom (isi persentase manual)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Diskon & Voucher</h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="diskon">
+                  Diskon Produk (%)
+                  <span class="tip" data-tip="Diskon yang Anda berikan ke pembeli. Biaya admin Shopee dihitung dari harga SETELAH diskon.">ⓘ</span>
+                </label>
+                <input type="text" inputmode="decimal" id="diskon" data-number value="0" />
+              </div>
+              <div class="field">
+                <label for="voucher">
+                  Voucher Toko (%)
+                  <span class="tip" data-tip="Voucher toko yang Anda tanggung sendiri (bukan voucher Shopee).">ⓘ</span>
+                </label>
+                <input type="text" inputmode="decimal" id="voucher" data-number value="0" />
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Biaya Dasar Shopee (%)</h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="admin">
+                  Biaya Administrasi
+                  <span class="tip" data-tip="Terisi otomatis dari dropdown Kategori + Level Toko. Pilih 'Custom' kalau mau isi manual. Sudah termasuk PPN.">ⓘ</span>
+                </label>
+                <input type="text" inputmode="decimal" id="admin" data-number value="10" />
+              </div>
+              <div class="field">
+                <label for="affiliate">
+                  Komisi Affiliate (AMS)
+                  <span class="tip" data-tip="Komisi yang Anda set untuk affiliator. Kalau tidak pakai program AMS, isi 0.">ⓘ</span>
+                </label>
+                <input type="text" inputmode="decimal" id="affiliate" data-number value="0" />
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">
+              Program Opsional
+              <span class="tip" data-tip="Toggle program yang toko Anda ikuti. Kalau off, tarif otomatis jadi 0%. Kalau on, isi angka sesuai Seller Centre Anda.">ⓘ</span>
+            </h3>
+
+            <div class="program-row">
+              <label class="switch">
+                <input type="checkbox" id="prog-ongkir" />
+                <span class="switch__slider"></span>
+              </label>
+              <div class="program-row__info">
+                <div class="program-row__title">Gratis Ongkir XTRA</div>
+                <div class="program-row__sub">Tarif standar 8% (produk biasa) · max Rp40rb/produk</div>
+              </div>
+              <div class="program-row__input">
+                <input type="text" inputmode="decimal" id="xtra-ongkir" data-number value="0" disabled />
+                <span class="program-row__suffix">%</span>
+              </div>
+            </div>
+
+            <div class="program-row">
+              <label class="switch">
+                <input type="checkbox" id="prog-promo" />
+                <span class="switch__slider"></span>
+              </label>
+              <div class="program-row__info">
+                <div class="program-row__title">Promo XTRA</div>
+                <div class="program-row__sub">Tarif umumnya 4,5%</div>
+              </div>
+              <div class="program-row__input">
+                <input type="text" inputmode="decimal" id="xtra-promo" data-number value="0" disabled />
+                <span class="program-row__suffix">%</span>
+              </div>
+            </div>
+
+            <div class="program-row">
+              <label class="switch">
+                <input type="checkbox" id="prog-live" />
+                <span class="switch__slider"></span>
+              </label>
+              <div class="program-row__info">
+                <div class="program-row__title">Live XTRA</div>
+                <div class="program-row__sub">Tarif umumnya 3% untuk order dari sesi Live</div>
+              </div>
+              <div class="program-row__input">
+                <input type="text" inputmode="decimal" id="xtra-live" data-number value="0" disabled />
+                <span class="program-row__suffix">%</span>
+              </div>
+            </div>
+
+            <div class="program-row">
+              <label class="switch">
+                <input type="checkbox" id="prog-preorder" />
+                <span class="switch__slider"></span>
+              </label>
+              <div class="program-row__info">
+                <div class="program-row__title">Layanan Pre-Order</div>
+                <div class="program-row__sub">3% per kuantitas (resmi Shopee 2026)</div>
+              </div>
+              <div class="program-row__input">
+                <input type="text" inputmode="decimal" id="preorder" data-number value="0" disabled />
+                <span class="program-row__suffix">%</span>
+              </div>
+            </div>
+
+            <div class="program-row">
+              <label class="switch">
+                <input type="checkbox" id="prog-spaylater" />
+                <span class="switch__slider"></span>
+              </label>
+              <div class="program-row__info">
+                <div class="program-row__title">SPayLater XTRA</div>
+                <div class="program-row__sub">
+                  <select id="spaylater-tenor" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;">
+                    <option value="3">Tenor 3 bulan — 2,5%</option>
+                    <option value="6" selected>Tenor 6 bulan — 4,0%</option>
+                  </select>
+                </div>
+              </div>
+              <div class="program-row__input">
+                <input type="text" inputmode="decimal" id="spaylater" data-number value="0" disabled />
+                <span class="program-row__suffix">%</span>
+              </div>
+            </div>
+
+            <div class="program-row">
+              <label class="switch">
+                <input type="checkbox" id="prog-premi" />
+                <span class="switch__slider"></span>
+              </label>
+              <div class="program-row__info">
+                <div class="program-row__title">Premi Asuransi / Proteksi</div>
+                <div class="program-row__sub">Opsional, umumnya 0,5%</div>
+              </div>
+              <div class="program-row__input">
+                <input type="text" inputmode="decimal" id="premi" data-number value="0" disabled />
+                <span class="program-row__suffix">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <h3 class="field-group__title">Biaya Nominal (Rp)</h3>
+            <div class="field-row">
+              <div class="field">
+                <label for="biaya-proses">Biaya Proses Pesanan</label>
+                <div class="input-wrap">
+                  <span class="input-prefix">Rp</span>
+                  <input type="text" inputmode="numeric" id="biaya-proses" data-money value="1.250" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="hemat-kirim">
+                  Hemat Biaya Kirim (Rp)
+                  <span class="tip" data-tip="HANYA isi jika toko Anda dapat subsidi ongkir langsung ke saldo (misal program khusus seller besar). Seller biasa isi 0. Potongan ongkir dari program Gratis Ongkir XTRA tidak masuk sini — itu cuma subsidi ke pembeli, bukan bonus ke seller.">ⓘ</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-prefix">Rp</span>
+                  <input type="text" inputmode="numeric" id="hemat-kirim" data-money value="0" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result column -->
+        <div class="card card--result">
+          <div class="result-headline">
+            <span class="result-headline__label">Harga Jual yang Harus Anda Pasang</span>
+            <span class="result-headline__value" id="result-harga-jual">Rp0</span>
+            <span class="result-headline__hint">Agar profit bersih sesuai target</span>
+          </div>
+
+          <div class="result-summary">
+            <div class="summary-item">
+              <span class="summary-item__label">Profit Bersih</span>
+              <span class="summary-item__value" id="result-profit">Rp0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__label">Margin</span>
+              <span class="summary-item__value" id="result-margin">0%</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-item__label">Total Biaya</span>
+              <span class="summary-item__value" id="result-total-biaya">Rp0</span>
+            </div>
+          </div>
+
+          <h3 class="breakdown__title">Rincian Perhitungan</h3>
+          <div class="breakdown" id="breakdown">
+            <!-- Filled by JS -->
+          </div>
+
+          <div class="formula-note">
+            <strong>Cara kerja:</strong> Kalkulator ini menggunakan rumus <em>pembalikan biaya</em>. Harga jual dihitung mundur dari target profit, sehingga semua biaya Shopee (yang dihitung dari harga jual akhir) sudah terkompensasi otomatis.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TAB 2: ROAS SIMULATION ============ -->
+    <section class="panel" id="panel-roas" role="tabpanel" hidden>
+
+      <!-- Educational collapsible panel -->
+      <details class="edu-panel" id="roas-edu">
+        <summary class="edu-panel__summary">
+          <span class="edu-panel__icon">💡</span>
+          <span class="edu-panel__title">Baru dengar istilah ROAS? Klik untuk penjelasan singkat</span>
+          <span class="edu-panel__arrow">▾</span>
+        </summary>
+        <div class="edu-panel__body">
+
+          <div class="edu-story">
+            <h4>Apa itu ROAS?</h4>
+            <p>ROAS = <strong>Return On Ad Spend</strong>, yaitu perbandingan antara uang masuk dari iklan vs uang yang Anda keluarkan untuk iklan.</p>
+
+            <div class="edu-example">
+              <div class="edu-example__step">
+                <span class="edu-example__label">Modal iklan</span>
+                <span class="edu-example__value">Rp 10.000</span>
+              </div>
+              <div class="edu-example__arrow">→</div>
+              <div class="edu-example__step">
+                <span class="edu-example__label">Penjualan dari iklan</span>
+                <span class="edu-example__value">Rp 50.000</span>
+              </div>
+              <div class="edu-example__arrow">=</div>
+              <div class="edu-example__step edu-example__step--result">
+                <span class="edu-example__label">ROAS</span>
+                <span class="edu-example__value">5×</span>
+              </div>
+            </div>
+
+            <p class="edu-hint">Artinya: setiap Rp1 yang Anda habiskan di iklan, menghasilkan Rp5 penjualan.</p>
+          </div>
+
+          <div class="edu-story">
+            <h4>Kenapa ROAS tinggi belum tentu untung?</h4>
+            <p>Banyak seller kaget: "ROAS saya 5×, kok saldo nggak nambah?". Alasannya: dari Rp50.000 penjualan tadi, ada banyak <em>potongan</em> — HPP, biaya admin Shopee, XTRA, dll. Jadi profit <em>bersih</em> sebenarnya jauh lebih kecil dari Rp50.000.</p>
+            <p><strong>Break Even ROAS</strong> adalah batas paling rendah ROAS yang membuat Anda <em>impas</em> — tidak rugi, tidak untung. Kalau iklan Anda ROAS-nya di bawah angka itu, artinya <strong>setiap iklan yang Anda pasang, Anda kehilangan uang</strong>.</p>
+          </div>
+
+          <div class="edu-story">
+            <h4>Kenapa kena PPN 11%?</h4>
+            <p>Sejak 2022, biaya iklan Shopee (Shopee Ads / GMV Max) dikenakan PPN 11%. Jadi kalau Anda budget iklan Rp100.000, yang ter-charge sebenarnya Rp111.000. Kalkulator ini sudah otomatis memperhitungkan PPN ini.</p>
+          </div>
+
+        </div>
+      </details>
+
+      <!-- Quick Check: Iklan Kemarin Untung/Rugi? -->
+      <div class="card card--quick-check">
+        <div class="card__header">
+          <h2>🎯 Cek iklan kemarin: untung atau rugi?</h2>
+        </div>
+        <p class="quick-check__intro">
+          Buka dashboard Shopee Ads Anda. Isi 2 angka di bawah ini untuk tau apakah iklan kemarin menguntungkan.
+        </p>
+
+        <div class="quick-check__grid">
+          <div class="field">
+            <label for="qc-biaya-iklan">
+              1. Total biaya iklan yang sudah kepotong
+              <span class="tip" data-tip="Angka yang tertulis di Shopee Ads dashboard sebagai 'Biaya Iklan'. Sudah termasuk PPN 11%.">ⓘ</span>
+            </label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="qc-biaya-iklan" data-money value="" placeholder="misal: 50.000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="qc-penjualan">
+              2. Total penjualan dari iklan itu
+              <span class="tip" data-tip="Di dashboard Shopee Ads: 'Penjualan dari Iklan' atau 'GMV Iklan'. Ini nilai barang yang terjual dari iklan.">ⓘ</span>
+            </label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="qc-penjualan" data-money value="" placeholder="misal: 250.000" />
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="qc-hitung" type="button">Hitung sekarang</button>
+
+        <div class="qc-result" id="qc-result" hidden>
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- Target ROAS Simulation -->
+      <div class="card card--roas-summary">
+        <h2 class="card__h2">📊 Simulasi lengkap target ROAS</h2>
+        <p class="card__intro">
+          Berdasarkan produk di tab <strong>"Hitung Harga Jual"</strong>, berikut ringkasan target iklan Anda:
+        </p>
+
+        <div class="roas-kpi">
+          <div class="roas-kpi__item roas-kpi__item--highlight">
+            <span class="roas-kpi__label">Break Even ROAS Anda</span>
+            <span class="roas-kpi__value" id="roas-bep">-</span>
+            <span class="roas-kpi__hint">Iklan di bawah angka ini = rugi. Targetkan minimal 1,3× dari angka ini untuk aman.</span>
+          </div>
+          <div class="roas-kpi__item">
+            <span class="roas-kpi__label">Untung bersih kalau nggak iklan</span>
+            <span class="roas-kpi__value" id="roas-profit-base">-</span>
+            <span class="roas-kpi__hint">Profit per order tanpa biaya iklan sama sekali</span>
+          </div>
+          <div class="roas-kpi__item">
+            <span class="roas-kpi__label">Harga jual per produk</span>
+            <span class="roas-kpi__value" id="roas-harga-jual">-</span>
+            <span class="roas-kpi__hint">Sesuai perhitungan di tab sebelumnya</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--roas-table">
+        <div class="card__header">
+          <h2>Tabel: sisa profit per target ROAS</h2>
+          <div class="legend">
+            <span class="legend__item"><span class="legend__dot legend__dot--profit"></span>Masih untung</span>
+            <span class="legend__item"><span class="legend__dot legend__dot--loss"></span>Rugi</span>
+            <span class="legend__item"><span class="legend__dot legend__dot--bep"></span>Impas</span>
+          </div>
+        </div>
+        <p class="card__intro">
+          Tabel ini menunjukkan: <em>kalau ROAS Anda X kali, berapa sisa profit bersih per order?</em> Scroll ke baris yang warnanya kuning = itu batas break even Anda.
+        </p>
+        <div class="roas-table-wrap">
+          <table class="roas-table" id="roas-table">
+            <thead>
+              <tr>
+                <th>ROAS</th>
+                <th>Biaya iklan / order</th>
+                <th>PPN 11%</th>
+                <th>Total biaya iklan</th>
+                <th>Sisa profit</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="roas-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TAB 3: BULK ============ -->
+    <section class="panel" id="panel-bulk" role="tabpanel" hidden>
+      <div class="panel__grid panel__grid--bulk">
+        <div class="card">
+          <div class="card__header">
+            <h2>Hitung Massal</h2>
+            <button class="btn-ghost" id="bulk-example" type="button">+ Isi Contoh</button>
+          </div>
+          <p class="bulk-hint">
+            Tempel daftar HPP (satu per baris) di kolom di bawah. Kalkulator akan menggunakan pengaturan biaya dari tab <strong>Hitung Harga Jual</strong>.
+          </p>
+          <label for="bulk-input" class="bulk-label">Daftar HPP (1 per baris)</label>
+          <textarea id="bulk-input" placeholder="50000&#10;75000&#10;120000&#10;..." spellcheck="false"></textarea>
+          <div class="bulk-actions">
+            <button class="btn-primary" id="bulk-calc" type="button">Hitung Semua</button>
+            <button class="btn-ghost" id="bulk-export" type="button">⬇ Ekspor CSV</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <h2>Hasil</h2>
+            <span class="bulk-count" id="bulk-count">0 produk</span>
+          </div>
+          <div class="bulk-table-wrap">
+            <table class="bulk-table" id="bulk-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>HPP</th>
+                  <th>Harga Jual</th>
+                  <th>Profit</th>
+                  <th>Margin</th>
+                </tr>
+              </thead>
+              <tbody id="bulk-tbody">
+                <tr class="bulk-empty">
+                  <td colspan="5">Belum ada data. Tempel HPP lalu klik "Hitung Semua".</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <strong>Kalkulator Shopee</strong> — dibuat untuk seller Indonesia.
+      </div>
+      <div class="footer__meta">
+        Semua perhitungan berjalan 100% di browser Anda. Tidak ada data yang dikirim ke server.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Wizard Modal (5-step setup for new users) -->
+  <div class="modal" id="wizard-modal" hidden aria-modal="true" role="dialog">
+    <div class="modal__backdrop" id="wizard-backdrop"></div>
+    <div class="modal__panel wizard-panel">
+      <div class="modal__header wizard-header">
+        <div class="wizard-progress">
+          <span class="wizard-progress__step wizard-progress__step--active" data-step="1">1</span>
+          <span class="wizard-progress__bar"></span>
+          <span class="wizard-progress__step" data-step="2">2</span>
+          <span class="wizard-progress__bar"></span>
+          <span class="wizard-progress__step" data-step="3">3</span>
+          <span class="wizard-progress__bar"></span>
+          <span class="wizard-progress__step" data-step="4">4</span>
+          <span class="wizard-progress__bar"></span>
+          <span class="wizard-progress__step" data-step="5">5</span>
+        </div>
+        <button class="modal__close" id="wizard-close" aria-label="Tutup">×</button>
+      </div>
+
+      <div class="modal__body wizard-body">
+        <!-- STEP 1: Level Toko -->
+        <div class="wizard-step wizard-step--active" data-step="1">
+          <h3 class="wizard-step__question">Toko Anda seperti apa?</h3>
+          <p class="wizard-step__hint">Ini menentukan tarif biaya administrasi dari Shopee.</p>
+          <div class="wizard-options">
+            <button class="wizard-option" data-w-field="level-toko" data-w-value="non-star">
+              <span class="wizard-option__emoji">🌱</span>
+              <div class="wizard-option__text">
+                <strong>Baru / Reguler</strong>
+                <span>Belum ada centang/label khusus. Ini yang paling umum untuk seller baru.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="level-toko" data-w-value="star">
+              <span class="wizard-option__emoji">⭐</span>
+              <div class="wizard-option__text">
+                <strong>Star Seller</strong>
+                <span>Ada label "Star" oranye di toko Anda.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="level-toko" data-w-value="star-plus">
+              <span class="wizard-option__emoji">⭐⭐</span>
+              <div class="wizard-option__text">
+                <strong>Star+ Seller</strong>
+                <span>Ada label "Star+" (bintang oranye dengan tanda plus).</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="level-toko" data-w-value="mall">
+              <span class="wizard-option__emoji">🏛️</span>
+              <div class="wizard-option__text">
+                <strong>Shopee Mall</strong>
+                <span>Brand resmi dengan label "Mall" khusus (logo Shopee Mall).</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Kategori Produk -->
+        <div class="wizard-step" data-step="2">
+          <h3 class="wizard-step__question">Anda jual produk apa?</h3>
+          <p class="wizard-step__hint">Tarif biaya admin Shopee berbeda-beda per kategori. Pilih yang paling mirip produk Anda.</p>
+          <div class="wizard-options">
+            <button class="wizard-option" data-w-field="kategori" data-w-value="A">
+              <span class="wizard-option__emoji">👕</span>
+              <div class="wizard-option__text">
+                <strong>Fashion, Makanan & Minuman, Lifestyle</strong>
+                <span>Baju, sepatu, tas, makanan, minuman, snack, perlengkapan rumah, kosmetik. Tarif admin <strong>10%</strong>.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="kategori" data-w-value="B">
+              <span class="wizard-option__emoji">📱</span>
+              <div class="wizard-option__text">
+                <strong>Elektronik, Perawatan Kulit, Aksesoris</strong>
+                <span>Gadget, earphone, skincare, jam tangan, popok, fashion bayi. Tarif admin <strong>9,25%</strong>.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="kategori" data-w-value="C">
+              <span class="wizard-option__emoji">🍼</span>
+              <div class="wizard-option__text">
+                <strong>Perlengkapan Bayi Khusus</strong>
+                <span>Susu formula, makanan bayi, vitamin & suplemen bayi. Tarif admin <strong>6,625%</strong>.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="kategori" data-w-value="D">
+              <span class="wizard-option__emoji">💻</span>
+              <div class="wizard-option__text">
+                <strong>Elektronik Premium</strong>
+                <span>Laptop, HP premium, desktop, monitor, printer, tablet. Tarif admin <strong>5,25%</strong>.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="kategori" data-w-value="E">
+              <span class="wizard-option__emoji">💎</span>
+              <div class="wizard-option__text">
+                <strong>Perhiasan & Logam Mulia</strong>
+                <span>Emas batangan, perhiasan emas, perhiasan berharga. Tarif admin <strong>4,25%</strong>.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-field="kategori" data-w-value="khusus">
+              <span class="wizard-option__emoji">🎫</span>
+              <div class="wizard-option__text">
+                <strong>Pulsa, Tiket, E-Money</strong>
+                <span>Pulsa, saldo e-wallet, tiket pesawat/kereta/konser, voucher. Tarif admin <strong>2,5%</strong>.</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Gratis Ongkir -->
+        <div class="wizard-step" data-step="3">
+          <h3 class="wizard-step__question">Toko Anda aktif program Gratis Ongkir?</h3>
+          <p class="wizard-step__hint">Cek produk Anda di Shopee — kalau ada logo 🚚 "Gratis Ongkir" di listing, artinya ya. Program ini menarik lebih banyak pembeli, tapi ada biaya 8% yang dipotong dari penjualan.</p>
+          <div class="wizard-options">
+            <button class="wizard-option" data-w-flag="prog-ongkir" data-w-value="true">
+              <span class="wizard-option__emoji">✅</span>
+              <div class="wizard-option__text">
+                <strong>Ya, produk saya ada Gratis Ongkir</strong>
+                <span>Toko mendapat logo Gratis Ongkir XTRA di listing produk.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-flag="prog-ongkir" data-w-value="false">
+              <span class="wizard-option__emoji">❌</span>
+              <div class="wizard-option__text">
+                <strong>Tidak, pembeli bayar ongkir sendiri</strong>
+                <span>Tidak ikut program — produk tidak tampil di section Gratis Ongkir.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-flag="prog-ongkir" data-w-value="true">
+              <span class="wizard-option__emoji">🤷</span>
+              <div class="wizard-option__text">
+                <strong>Saya belum tau / belum pernah jualan</strong>
+                <span>Pilih yang aman: asumsikan ikut program (biaya lebih tinggi = margin lebih aman).</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Live + Promo XTRA -->
+        <div class="wizard-step" data-step="4">
+          <h3 class="wizard-step__question">Ikut program promosi tambahan?</h3>
+          <p class="wizard-step__hint">Kalau masih pemula dan belum mengerti, pilih "Tidak". Ini bisa di-update nanti kalau toko Anda berkembang.</p>
+          <div class="wizard-options">
+            <button class="wizard-option" data-w-combo="none">
+              <span class="wizard-option__emoji">❌</span>
+              <div class="wizard-option__text">
+                <strong>Tidak, cuma jualan biasa</strong>
+                <span>Untuk seller pemula — paling umum.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-combo="live">
+              <span class="wizard-option__emoji">🎥</span>
+              <div class="wizard-option__text">
+                <strong>Pernah Live Streaming di Shopee Live</strong>
+                <span>Tambahan biaya 3% untuk order dari sesi Live.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-combo="promo">
+              <span class="wizard-option__emoji">🎉</span>
+              <div class="wizard-option__text">
+                <strong>Ikut Promo XTRA (banner promo besar)</strong>
+                <span>Tambahan biaya 4,5%.</span>
+              </div>
+            </button>
+            <button class="wizard-option" data-w-combo="both">
+              <span class="wizard-option__emoji">🔥</span>
+              <div class="wizard-option__text">
+                <strong>Ikut keduanya</strong>
+                <span>Live XTRA (3%) + Promo XTRA (4,5%).</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 5: HPP & Target Profit -->
+        <div class="wizard-step" data-step="5">
+          <h3 class="wizard-step__question">Yang terakhir — modal & target untung</h3>
+          <p class="wizard-step__hint">Ini informasi paling penting. Tanpa modal (HPP), kalkulator tidak bisa menghitung harga jual yang akurat.</p>
+
+          <div class="wizard-field">
+            <label for="wizard-hpp">
+              Modal / HPP per produk
+              <span class="tip" data-tip="Harga kulakan di supplier, biaya produksi, atau harga beli barang. Ini rahasia Anda, Shopee tidak tau angka ini.">ⓘ</span>
+            </label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="wizard-hpp" placeholder="50.000" />
+            </div>
+          </div>
+
+          <div class="wizard-field">
+            <label for="wizard-profit">
+              Target untung per produk (%)
+              <span class="tip" data-tip="Berapa % keuntungan yang Anda mau dari HPP? 15-25% lumayan sehat untuk seller pemula.">ⓘ</span>
+            </label>
+            <div class="input-wrap">
+              <input type="text" inputmode="decimal" id="wizard-profit" placeholder="15" />
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+
+          <div class="wizard-suggestions">
+            <p style="font-size: 12px; color: var(--color-muted); margin: 8px 0 4px;">Contoh target profit umum:</p>
+            <div class="wizard-chips">
+              <button class="wizard-chip" data-w-profit="10">10% (aman)</button>
+              <button class="wizard-chip" data-w-profit="15">15% (seimbang)</button>
+              <button class="wizard-chip" data-w-profit="20">20% (ambisius)</button>
+              <button class="wizard-chip" data-w-profit="30">30% (premium)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__footer wizard-footer">
+        <button class="btn-ghost" id="wizard-skip">Lewati, isi manual</button>
+        <div class="wizard-nav">
+          <button class="btn-ghost" id="wizard-back" hidden>← Kembali</button>
+          <button class="btn-primary" id="wizard-next">Lanjut →</button>
+          <button class="btn-primary" id="wizard-finish" hidden>🎉 Selesai</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
